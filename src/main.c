@@ -8,6 +8,7 @@
 #include "json_loader.h"
 #include "sanity_check_slots.h"
 #include "scenario.h"
+#include "veh_mru.h"
 
 /*
  * Data Structure - ChargeCraft — Demo console
@@ -392,7 +393,12 @@ int main(void){
 
     printf("\n ========== CLEANUP ========== \n");
 cleanup:
-        si_clear(&idx);
+    si_clear(&idx);
+    printf(" > AVL Stations cleared ! < \n");
+    q_clear(&q);
+    printf(" > Queue des évènements cleared ! < \n");
+    veh_mru_clear_all();
+    printf(" > MRU vehicules cleared ! < \n");
 
     return 0;
 }
