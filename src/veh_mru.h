@@ -8,5 +8,6 @@
 SList VEH_MRU[MAX_VEH];
 
 void add_to_mru(int veh_id, int station_id);
+void veh_mru_clear_all(void);
 
 #endif

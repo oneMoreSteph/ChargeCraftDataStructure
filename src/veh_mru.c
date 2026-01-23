@@ -1,4 +1,5 @@
 #include "veh_mru.h"
+#include <stdlib.h>
 
 void add_to_mru(int veh_id, int station_id){
     if(veh_id<0 || veh_id>=MAX_VEH) return;
@@ -9,3 +10,9 @@ void add_to_mru(int veh_id, int station_id){
     if(count>MRU_CAP) ds_slist_remove_tail(&VEH_MRU[veh_id], &drop);
 }
 
+void veh_mru_clear_all(void)
+{
+    for (int v = 0; v < MAX_VEH; v++) {
+        ds_slist_clear(&VEH_MRU[v]);
+    }
+}
