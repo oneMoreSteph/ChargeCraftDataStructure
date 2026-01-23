@@ -8,7 +8,7 @@ Conformément au cahier des charges, les modules fonctionnels suivants ont été
 * **Module A1 (Indexation & Recherche)** : Implémentation de requêtes par intervalle d'IDs (`si_range_ids`) et comptage par puissance (`si_count_ge_power`).
 * **Module A3 (Filtrage Avancé)** : Moteur de règles flexible utilisant une notation postfixe (Stack) pour filtrer les stations selon plusieurs critères combinés.
 * **Module B2 (Résilience & Pannes)** : Gestion d'un mode "dégradé". Simulation d'une panne sectorielle (Power Outage) sans interruption du traitement du flux d'événements.
-* **Module C1 (Suivi Véhicules)** : Suivi des dernières stations visitées par un véhicule (MRU - Most Recently Used) via une liste chaînée simple.
+* **feature supplémentaire - Reroutage** (`process_event()`) : Le mécanisme de reroutage vise à garantir la continuité de service du système face à l’indisponibilité ponctuelle d’une station de recharge. Il est déclenché uniquement lorsqu’une demande de branchement (PLUG_IN) ne peut pas être satisfaite sur la station ciblée, en raison d’un manque de puissance ou de slots disponibles. Plutôt que de rejeter immédiatement la demande, le système tente d’identifier une station alternative encore opérationnelle, en s’appuyant exclusivement sur l’état courant des stations maintenu dans l’index AVL.
 
 ## 2. Scénario de Démonstration
 L'exécutable `ev_demo` déroule le scénario suivant pour valider les structures :
