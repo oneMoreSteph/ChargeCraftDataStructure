@@ -23,6 +23,14 @@
  * des stations et la réponse apportée aux événements produits.
  */
 
+static void wait_for_user(const char* label) {
+    printf("\n--------------------------------------------\n");
+    printf("⏸  %s\n", label);
+    printf("👉 Appuyez sur ENTREE pour continuer...\n");
+    printf("--------------------------------------------\n");
+    while (getchar() != '\n');  // vide le buffer si besoin
+}
+
 int main(void){
 
     // ------------------------------------------------------------------
@@ -55,6 +63,8 @@ int main(void){
     }
 
     printf("[INFO] Index AVL initialisé\n");
+
+    wait_for_user("Fin du chargement des données (CSV / JSON)");
 
     // ------------------------------------------------------------------
     // 2. SANITY CHECK
@@ -157,6 +167,8 @@ int main(void){
     else
         printf("🟠 %d stations avec slots_free négatif\n", bad_slots);
 
+    wait_for_user("Sanity checks terminés (A1 / A3 / cohérence slots)");
+
     // ------------------------------------------------------------------
     // SCÉNARIO B2 — RÉSILIENCE DU SYSTÈME (Panne & dégradation)
     // ------------------------------------------------------------------
@@ -211,6 +223,8 @@ int main(void){
         goto cleanup;
     }
 
+    wait_for_user("État nominal établi : stations disponibles identifiées");
+
     // ------------------------------------------------------------------
     // 4. ETAT NOMINAL - TRAITEMENT D’ÉVÉNEMENTS
     // ------------------------------------------------------------------
@@ -242,6 +256,8 @@ int main(void){
 
     printf("🟢 Événements traités en état nominal\n");
 
+    wait_for_user("Fin du traitement des événements en état nominal");
+
     // ------------------------------------------------------------------
     // 5. SÉLECTION DU SECTEUR EN PANNE
     // ------------------------------------------------------------------
@@ -272,6 +288,8 @@ int main(void){
     printf("\nSecteur en panne (stations) [%d : %d] ", low_id, high_id);
     printf("\n");
 
+    wait_for_user("Secteur en panne identifié");
+
     // ------------------------------------------------------------------
     // 6. INJECTION DE LA PANNE (POWER OUTAGE)
     // ------------------------------------------------------------------
@@ -294,6 +312,8 @@ int main(void){
         low_id,
         high_id
     );
+
+    wait_for_user("Panne injectée — passage en mode dégradé");
 
     // ------------------------------------------------------------------
     // 7. ETAT DÉGRADÉ - STATIONS DISPONIBLES
@@ -318,6 +338,8 @@ int main(void){
         "état dégradé (pendant panne)"
     );
 
+    wait_for_user("Stations disponibles en état dégradé observées");
+
     // ------------------------------------------------------------------
     // 8. ÉTAT DÉGRADÉ - TRAITEMENT DES ÉVÈNEMENTS
     // ------------------------------------------------------------------
@@ -334,6 +356,8 @@ int main(void){
     process_events(&q, &idx);
 
     printf("🟢 Événements traités en mode dégradé (adaptation active)\n");
+
+    wait_for_user("Fin du traitement en mode dégradé");
 
     // ------------------------------------------------------------------
     // 9. RECOVERY - RESTAURATION DU SECTEUR
@@ -359,6 +383,8 @@ int main(void){
         low_id,
         high_id
     );
+
+    wait_for_user("Recovery effectué — retour progressif au nominal");
 
     // ------------------------------------------------------------------
     // 10. OBSERVATION POST-RECOVERY
@@ -388,6 +414,8 @@ int main(void){
     process_events(&q, &idx);
 
     printf("🟢 Événements traités après recovery (retour au nominal)\n");
+
+    wait_for_user("Scénario B2 terminé — observation finale");
 
     // ------------------------------------------------------------------
     // 11. CLEANUP
