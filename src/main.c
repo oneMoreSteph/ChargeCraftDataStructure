@@ -393,6 +393,7 @@ int main(void){
     printf("\n ========== CLEANUP ========== \n");
 cleanup:
         si_clear(&idx);
+        q_clear(&q);
 
     return 0;
 }
