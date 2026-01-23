@@ -389,9 +389,12 @@ int main(void){
 
     printf("🟢 Événements traités après recovery (retour au nominal)\n");
 
-    // -----
+    // ------------------------------------------------------------------
+    // 11. CLEANUP
+    // ------------------------------------------------------------------
 
     printf("\n ========== CLEANUP ========== \n");
+
 cleanup:
     si_clear(&idx);
     printf(" > AVL Stations cleared ! < \n");
@@ -402,3 +405,46 @@ cleanup:
 
     return 0;
 }
+    // ------------------------------------------------------------------
+    // OBSERVATION - B2 – Résilience : suivi concret de la station 1002
+    // ------------------------------------------------------------------
+    /*
+     *
+     * La station 1002 (power = 150kW, slots initiaux = 5) est utilisée
+     * comme point d’observation pour vérifier la cohérence du système
+     * dans les différents états : nominal, dégradé et recovery.
+     *
+     * 1) ÉTAT NOMINAL
+     *    - t=02 : PLUG_IN → slots passent de 5 à 4
+     *    - t=04 : PLUG_IN → slots passent de 4 à 3
+     *    - t=06 : PLUG_OUT → slots passent de 3 à 4
+     *    - t=07 : PLUG_OUT → slots passent de 4 à 5
+     *
+     *    → En fonctionnement normal, chaque événement met à jour
+     *      correctement le nombre de slots, sans incohérence.
+     *
+     * 2) ÉTAT DÉGRADÉ (panne secteur [1101–1150])
+     *    - Plusieurs stations deviennent indisponibles (power = 0)
+     *    - Les véhicules sont reroutés vers la station 1002 :
+     *        t=13 → slots : 5 → 4
+     *        t=14 → slots : 4 → 3
+     *        t=16 → slots : 3 → 2
+     *        t=17 → slots : 2 → 1
+     *
+     *    → La station 1002 absorbe la charge du secteur en panne
+     *      tout en conservant un état cohérent (slots >= 0).
+     *
+     * 3) RETOUR AU NOMINAL (recovery)
+     *    - t=02 : PLUG_IN → slots : 1 → 0
+     *    - t=04 : PLUG_IN refusé (slots = 0)
+     *    - t=06 : PLUG_OUT → slots : 0 → 1
+     *    - t=07 : PLUG_OUT → slots : 1 → 2
+     *
+     *    → Le système applique les mêmes règles qu’en nominal :
+     *      refus si slots = 0, réintégration dès qu’un slot se libère.
+     *
+     * Ce suivi montre que la logique de gestion des slots reste
+     * cohérente et déterministe, quel que soit l’état du système
+     * (nominal, dégradé ou après recovery).
+     * ------------------------------------------------------------
+     */
