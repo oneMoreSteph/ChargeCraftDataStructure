@@ -37,7 +37,7 @@ int main(void){
     /* Chargement CSV
      * - Initialise le référentiel des stations (AVL).
      */
-    int c_csv = ds_load_stations_from_csv("data/izivia_tp_subset.csv", &idx);
+    int c_csv = ds_load_stations_from_csv("../data/izivia_tp_subset.csv", &idx);
     if (c_csv <= 0) {
         printf("🔴 Chargement CSV échoué ou fichier vide\n");
         return 1;
@@ -49,7 +49,7 @@ int main(void){
     /* (Optionnel) Chargement JSON minimal
      * - Permet d'ajouter/mettre à jour un petit jeu de stations.
      */
-    int c_json = ds_load_stations_from_json("data/izivia_tp_min.json", &idx);
+    int c_json = ds_load_stations_from_json("../data/izivia_tp_min.json", &idx);
     if (c_json > 0) {
         printf("🟢 %d stations chargées depuis le JSON\n", c_json);
     }
