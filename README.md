@@ -27,6 +27,6 @@ L'exécutable `ev_demo` déroule le scénario suivant pour valider les structure
 
 Le projet ne nécessite aucune librairie externe.
 
-**Compiler le projet :**
+**Compiler et executer le projet :**
 ```bash
-make
+make && ./ev_demo
